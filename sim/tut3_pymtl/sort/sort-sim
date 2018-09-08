@@ -67,7 +67,7 @@ def parse_cmdline():
     choices=["fl","cl","rtl-flat","rtl-struct"] )
 
   p.add_argument( "--input", default="random",
-    choices=["random","sorted-fwd","sorted-rev"] )
+    choices=["random","sorted-fwd","sorted-rev","lt16"] )
 
   p.add_argument( "--trace",     action="store_true" )
   p.add_argument( "--stats",     action="store_true" )
@@ -101,6 +101,10 @@ def main():
   elif opts.input == "sorted-rev":
     for i in xrange(ninputs):
       inputs.append( sorted([ randint(0,0xff) for i in xrange(4) ], reverse=True ) )
+
+  elif opts.input == "lt16":
+    for i in xrange(ninputs):
+      inputs.append( [randint(0,0x16) for i in xrange(4)])
 
   # Instantiate the model
 

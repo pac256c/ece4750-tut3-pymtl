@@ -92,3 +92,30 @@ def test_random( dump_vcd ):
 
   run_test_vector_sim( SortUnitFL(), test_vector_table, dump_vcd )
 
+def test_sorted( dump_vcd ):
+  run_test_vector_sim( SortUnitFL(), [ header_str,
+    # in  in  in  in  in  out out out out out
+    # val [0] [1] [2] [3] val [0] [1] [2] [3]
+    [ 0,   0,  0,  0,  0,  0,  x,  x,  x,  x ],
+    [ 1,   2,  3,  4,  5,  0,  x,  x,  x,  x ],
+    [ 1,   4,  3,  2,  1,  1,  2,  3,  4,  5 ],
+    [ 0,   0,  0,  0,  0,  1,  1,  2,  3,  4 ],
+    [ 0,   0,  0,  0,  0,  0,  x,  x,  x,  x ],
+  ], dump_vcd )
+
+def test_random2( dump_vcd ):
+
+  test_vector_table = [ header_str,
+    # in  in  in  in  in  out out out out out
+    # val [0] [1] [2] [3] val [0] [1] [2] [3]
+    [ 0,  0,  0,  0,  0,  0,  x,  x,  x,  x ],
+    [ 1,  0,  0,  0,  0,  0,  x,  x,  x,  x ],
+  ]
+
+  last_results = [0, 0, 0, 0]
+  for i in xrange(20):
+    inputs = [ randint(0,0xfff) for i in xrange(4) ]
+    test_vector_table.append([1] + inputs + [1] + last_results)
+    last_results = deepcopy( sorted(inputs) )
+
+  run_test_vector_sim( SortUnitFL(12), test_vector_table, dump_vcd )

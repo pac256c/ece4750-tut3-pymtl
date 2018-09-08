@@ -11,16 +11,16 @@ class RegIncr( Model ):
 
   # Constructor
 
-  def __init__( s ):
+  def __init__( s, nbits=8 ):
 
     # Port-based interface
 
-    s.in_ = InPort  ( Bits(8) )
-    s.out = OutPort ( Bits(8) )
+    s.in_ = InPort  ( Bits(nbits) )
+    s.out = OutPort ( Bits(nbits) )
 
     # Sequential logic
 
-    s.reg_out = Wire( Bits(8) )
+    s.reg_out = Wire( Bits(nbits) )
 
     @s.tick
     def block1():
@@ -29,10 +29,10 @@ class RegIncr( Model ):
       else:
         s.reg_out.next = s.in_
 
-    # ''' TUTORIAL TASK ''''''''''''''''''''''''''''''''''''''''''''''''''
-    # This model is incomplete. As part of the tutorial you will insert a
-    # combinational concurrent block here to model the incrementer logic,
-    # and later you will insert a line tracing function to compactly
-    # output the input, register, and output values.
-    # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    # Combinational logic 
+    @s.combinational
+    def block2():
+      s.out.value = s.reg_out + 1
 
+  def line_trace(s):
+    return "in:{} ({}) out:{}".format(s.in_, s.reg_out, s.out)
